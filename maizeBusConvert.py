@@ -60,21 +60,22 @@ def export_classrooms_to_file(rooms, filename="classroomId.txt"):
 
     print(f"Classroom IDs written to {filename}")
 
-doc = fitz.open("Map.pdf")
-print(type(doc))
-room_directory = dict()
+def extract_classrooms(pdf_path):
+    doc = fitz.open(pdf_path)
+    print(type(doc))
+    room_directory = dict()
 
-for page in doc:
-    text = page.get_text("text").splitlines()
-    sPrint = 0
-    for line in text:
-        if sPrint == 2:
-            print(line)
-            tempClasser = classify_room(line)
-            if tempClasser:  # only store classrooms
-                room_directory[line] = Room(line, (0, 0), tempClasser)
-        elif len(line) > 5 and line[2] == "/" and line[5] == "/":
-            sPrint += 1
-doc.close()
-export_classrooms_to_file(room_directory.values())
+    for page in doc:
+        text = page.get_text("text").splitlines()
+        sPrint = 0
+        for line in text:
+            if sPrint == 2:
+                print(line)
+                tempClasser = classify_room(line)
+                if tempClasser:  # only store classrooms
+                    room_directory[line] = Room(line, (0, 0), tempClasser)
+            elif len(line) > 5 and line[2] == "/" and line[5] == "/":
+                sPrint += 1
+    doc.close()
+    export_classrooms_to_file(room_directory.values())
 
