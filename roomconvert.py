@@ -9,7 +9,7 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 
-
+# Classifying Rooms + Finding what is a classroom
 class RoomType(Enum):
     CLASSROOM = "Classroom"
     AUDITORIUM = "Auditorium"
@@ -41,7 +41,6 @@ def classify_room(room_name: str) -> RoomType:
     
     if re.fullmatch(r"\d{4}-\d{2}", room_name):
         return RoomType.CLASSROOM
-    return None
 
 @dataclass
 class Room:
@@ -49,9 +48,6 @@ class Room:
     location: tuple
     classification: RoomType
 
-
-
-print("hello world")
 def export_classrooms_to_file(rooms, filename="classroomId.txt"):
     with open(filename, "w") as file:  # "w" overwrites file each time
         for room in rooms:
@@ -60,21 +56,51 @@ def export_classrooms_to_file(rooms, filename="classroomId.txt"):
 
     print(f"Classroom IDs written to {filename}")
 
+
+# This is for finding the Position of Rooms
 doc = fitz.open("Map.pdf")
 print(type(doc))
 room_directory = dict()
-
-for page in doc:
-    text = page.get_text("text").splitlines()
+# page = .txt file
+for page in doc: # Instead of page in doc, we need to say text file in doc to get the correct rooms
+    text = page.TextPage.extractTEXT().splitlines()
     sPrint = 0
     for line in text:
         if sPrint == 2:
             print(line)
-            tempClasser = classify_room(line)
-            if tempClasser:  # only store classrooms
-                room_directory[line] = Room(line, (0, 0), tempClasser)
+            tempClasser = RoomType.CLASSROOM
+            room_directory[line] = Room(line, (0, 0), tempClasser)
         elif len(line) > 5 and line[2] == "/" and line[5] == "/":
             sPrint += 1
 doc.close()
-export_classrooms_to_file(room_directory.values())
 
+
+class Cords:
+  def __init__(self):
+    self.x0 = 0
+    self.y0 = 0
+    self.name = ""
+
+
+doc = fitz.open("Map_Cropped.pdf")
+page = doc[0]
+
+#x0, y0, x1, y1, Room
+words = page.get_text("words")
+
+rooms = []
+for i in range(len(words)):
+  room = Cords()
+  room.x0 = (words[i][0] + words[i][2])/2
+  room.y0 = (words[i][1] + words[i][3])/2
+  room.name = words[i][4]
+  rooms.append(room)
+
+for room in rooms:
+  for i in range(len(rooms)):
+    print("Location name:", rooms[i].name)
+    print("X coordinate", rooms[i].x0)
+    print("Y coordinate", rooms[i].y0)
+    print("Next Location: ")
+
+# Output to classroomPos.json file with roomID, X/Y Coordinate
