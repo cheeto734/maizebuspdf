@@ -37,6 +37,6 @@ def export_Cords(pdf_name, text):
         line = line.strip()
         requested[line] = data[line]
 
-  with open("cords.json", "w") as f:
+  with open("coords.json", "w") as f:
     json.dump(requested, f, indent=4)
 

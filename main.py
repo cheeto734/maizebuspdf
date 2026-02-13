@@ -1,8 +1,5 @@
 from maizeBusConvert import extract_classrooms
-from maizeBusCord import export_Cords
-
-# from maizeBusCord import ... TODO
-
+from maizeBusCoord import export_Cords
 
 def main():
     print("Extracting classroom IDs...")
@@ -12,7 +9,7 @@ def main():
     print("Extracting coordinates...")
     export_Cords("Map_Cropped.pdf", "classroomId.txt")
 
-    print("Done. Output written to classroomPos.json")
+    print("Done. Output written to coords.json")
 
 
 if __name__ == "__main__":
