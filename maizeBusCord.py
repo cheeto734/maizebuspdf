@@ -11,8 +11,8 @@ class Cords:
 
 
 
-def export_Cords(file_name):
-  doc = fitz.open(file_name)
+def export_Cords(pdf_name, text):
+  doc = fitz.open(pdf_name)
 
   page = doc[0]
 
@@ -31,6 +31,12 @@ def export_Cords(file_name):
   for room in rooms:
     data[room.name] = (room.x0, room.y0)
 
+  requested = {}
+  with open(text, "r") as f:
+    for line in f:
+        line = line.strip()
+        requested[line] = data[line]
+
   with open("cords.json", "w") as f:
-    json.dump(data, f, indent=4)
+    json.dump(requested, f, indent=4)
 

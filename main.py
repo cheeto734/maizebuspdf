@@ -10,7 +10,7 @@ def main():
     extract_classrooms("Map.pdf")
 
     print("Extracting coordinates...")
-    export_Cords("Map_Cropped.pdf")
+    export_Cords("Map_Cropped.pdf", "classroomId.txt")
 
     print("Done. Output written to classroomPos.json")
 
