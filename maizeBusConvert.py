@@ -13,6 +13,6 @@ print("hello world")
 doc = fitz.open("Map.pdf")
 
 for page in doc:
-    text = page.get_text()
+    text = page.TextPage.extractTEXT()
     print(text)
 doc.close()
