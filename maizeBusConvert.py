@@ -58,7 +58,7 @@ print(type(doc))
 room_directory = dict()
 
 for page in doc:
-    text = page.get_text().splitlines()
+    text = page.TextPage.extractTEXT().splitlines()
     sPrint = 0
     for line in text:
         if sPrint == 2:
