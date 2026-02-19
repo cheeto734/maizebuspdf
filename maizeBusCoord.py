@@ -40,3 +40,20 @@ def export_Cords(pdf_name, text):
   with open("coords.json", "w") as f:
     json.dump(requested, f, indent=4)
 
+  radius = 4  # adjust size
+  shape = page.new_shape()
+
+  for name, (x, y) in requested.items():
+    r = fitz.Rect(x - radius, y - radius, x + radius, y + radius)
+    shape.draw_oval(r)
+    shape.finish(color=(1, 0, 0), fill=None) 
+
+  shape.commit()
+  
+  #There are annotations that reshow when the pdf is resaved. This gets rid of 
+  #them so they aren't highlighted yellow
+  for annot in page.annots():
+    page.delete_annot(annot)
+  doc.save("map_with_dots.pdf")
+  doc.close()
+
